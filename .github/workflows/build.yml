@@ -17,7 +17,7 @@ jobs:
         uses: openwrt/gh-action-sdk@main
         env:
           ARCH: ipq40xx-generic
-          PACKAGES: rnspure
+          PACKAGES: rns
           EXTRA_FEEDS: >-
             src-git|reticulum|https://github.com/gretel/feed-reticulum.git
           INDEX: 1
