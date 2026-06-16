@@ -1,0 +1,38 @@
+name: Build RNS for GL-XE300 Puli
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: ipq40xx-generic build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Build RNS packages
+        uses: openwrt/gh-action-sdk@main
+        env:
+          ARCH: ipq40xx-generic
+          PACKAGES: rnspure lxmf
+          EXTRA_FEEDS: >-
+            src-git|reticulum|https://github.com/gretel/feed-reticulum.git
+          INDEX: 1
+          BUILD_LOG: 1
+          V: s
+
+      - name: Upload packages
+        uses: actions/upload-artifact@v4
+        with:
+          name: rns-ipq40xx-generic
+          path: bin/packages/arm_cortex-a7_neon-vfpv4/**/*.apk
+
+      - name: Upload build logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-logs
+          path: bin/logs/
